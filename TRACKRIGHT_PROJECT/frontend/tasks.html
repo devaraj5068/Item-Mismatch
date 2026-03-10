@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tasks - TrackRight</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>🎯 TrackRight</h2>
+        <ul>
+            <li><a href="dashboard-new.html">📊 Dashboard</a></li>
+            <li><a href="orders.html">📦 Orders</a></li>
+            <li><a href="scan_verify.html">🔍 Scan & Verify</a></li>
+            <li><a href="mismatch_reports.html">⚠️ Mismatches</a></li>
+            <li><a href="tasks.html" class="active">✅ My Tasks</a></li>
+            <li><a href="#" id="logout">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-bar">
+            <h1>My Tasks</h1>
+            <div class="top-bar-right">
+                <button class="btn btn-primary">+ New Task</button>
+            </div>
+        </div>
+
+        <!-- Task Stats -->
+        <div class="stats-grid">
+            <div class="stat-card blue">
+                <h3>Pending</h3>
+                <div class="number" id="pending-count">0</div>
+            </div>
+            <div class="stat-card yellow">
+                <h3>In Progress</h3>
+                <div class="number" id="inprogress-count">0</div>
+            </div>
+            <div class="stat-card green">
+                <h3>Completed</h3>
+                <div class="number" id="completed-count">0</div>
+            </div>
+        </div>
+
+        <!-- Tasks Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3 style="margin: 0;">📋 All Tasks</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Due Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tasks-list">
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: #6b7280;">Loading tasks...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>
+        // Load tasks
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const token = localStorage.getItem('auth_token');
+                const response = await fetch('http://localhost:8000/api/tasks/', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const tasks = await response.json();
+                displayTasks(tasks);
+                updateTaskStats(tasks);
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+            }
+        });
+
+        function displayTasks(tasks) {
+            const tbody = document.getElementById('tasks-list');
+            if (tasks.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6b7280;">No tasks found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = tasks.map(task => `
+                <tr>
+                    <td><strong>${task.title}</strong></td>
+                    <td><span class="badge ${getPriorityBadgeClass(task.priority)}">${task.priority}</span></td>
+                    <td><span class="badge ${getStatusBadgeClass(task.status)}">${task.status}</span></td>
+                    <td>${task.due_date || 'No due date'}</td>
+                    <td>
+                        <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">View</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateTaskStats(tasks) {
+            const pending = tasks.filter(t => t.status === 'pending').length;
+            const inprogress = tasks.filter(t => t.status === 'in_progress').length;
+            const completed = tasks.filter(t => t.status === 'completed').length;
+
+            document.getElementById('pending-count').textContent = pending;
+            document.getElementById('inprogress-count').textContent = inprogress;
+            document.getElementById('completed-count').textContent = completed;
+        }
+
+        function getPriorityBadgeClass(priority) {
+            if (priority === 'high') return 'badge-danger';
+            if (priority === 'medium') return 'badge-warning';
+            return 'badge-primary';
+        }
+
+        function getStatusBadgeClass(status) {
+            if (status === 'completed') return 'badge-success';
+            if (status === 'in_progress') return 'badge-warning';
+            return 'badge-primary';
+        }
+    </script>
+</body>
+</html>

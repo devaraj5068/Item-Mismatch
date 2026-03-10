@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}TrackRight - Warehouse Verification System{% endblock %}
+
+{% block content %}
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-logo">🎯 TrackRight</div>
+        <ul class="navbar-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="{% url 'login' %}" class="btn btn-primary" style="margin: 0; padding: 10px 20px;">Login</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section" data-aos="fade-in">
+    <h1 data-aos="zoom-in">Eliminate Wrong-Item Shipments Forever</h1>
+    <p data-aos="fade-up" data-aos-delay="200">
+        TrackRight uses intelligent barcode scanning and real-time verification to detect mismatches before they reach customers.
+    </p>
+    <a href="{% url 'login' %}" class="cta-button" data-aos="fade-up" data-aos-delay="300">Get Started Now</a>
+</section>
+
+<!-- Features Section -->
+<section class="features-section" id="features">
+    <h2 data-aos="fade-up">Why Choose TrackRight?</h2>
+    <div class="features-grid">
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+            <h3>📱 Barcode Scanning</h3>
+            <p>Real-time barcode scanning with html5-qrcode for instant product verification at every step.</p>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+            <h3>🚨 Real-time Alerts</h3>
+            <p>Instant notifications when mismatches are detected, preventing wrong items from shipping.</p>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+            <h3>📊 Analytics Dashboard</h3>
+            <p>Comprehensive charts and statistics to track scan accuracy and warehouse performance.</p>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+            <h3>👥 Multi-role Access</h3>
+            <p>Admin and Warehouse Staff roles with role-based permissions and task assignments.</p>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+            <h3>📦 Delivery Tracking</h3>
+            <p>Track orders from warehouse to customer with complete visibility and status updates.</p>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+            <h3>📋 Audit Trail</h3>
+            <p>Comprehensive logs of all scans, verifications, and mismatches for compliance and insights.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section" data-aos="fade-in">
+    <h2>Ready to Eliminate Shipping Errors?</h2>
+    <p style="margin-bottom: 20px;">Join leading warehouses that have reduced shipment errors by 99%</p>
+    <a href="{% url 'login' %}" class="cta-button" style="background: white; color: var(--primary);">Start Free Trial</a>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2026 TrackRight. All rights reserved. | Warehouse Verification Excellence</p>
+</footer>
+{% endblock %}

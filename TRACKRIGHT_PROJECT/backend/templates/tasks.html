@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Tasks - TrackRight{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>🎯 TrackRight</h2>
+        <ul>
+            <li><a href="{% url 'dashboard' %}">📊 Dashboard</a></li>
+            <li><a href="{% url 'orders' %}">📦 Orders</a></li>
+            <li><a href="{% url 'scan_verify' %}">🔍 Scan & Verify</a></li>
+            <li><a href="{% url 'mismatches' %}">⚠️ Mismatches</a></li>
+            <li><a href="{% url 'tasks' %}" class="active">✅ My Tasks</a></li>
+            <li><a href="{% url 'logout' %}">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-bar">
+            <h1>My Tasks</h1>
+            <div class="top-bar-right">
+                <button class="btn btn-primary">+ New Task</button>
+            </div>
+        </div>
+
+        <!-- Task Stats -->
+        <div class="stats-grid">
+            <div class="stat-card blue">
+                <h3>Pending</h3>
+                <div class="number" id="pending-count">0</div>
+            </div>
+            <div class="stat-card yellow">
+                <h3>In Progress</h3>
+                <div class="number" id="inprogress-count">0</div>
+            </div>
+            <div class="stat-card green">
+                <h3>Completed</h3>
+                <div class="number" id="completed-count">0</div>
+            </div>
+        </div>
+
+        <!-- Tasks Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3 style="margin: 0;">📋 All Tasks</h3>
+                <input type="text" class="search-bar" placeholder="Search tasks...">
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Due Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tasks-list">
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: #6b7280;">Loading tasks...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/tasks.js' %}"></script>
+{% endblock %}

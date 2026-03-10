@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - TrackRight</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>TrackRight</h2>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="orders.html">Orders</a></li>
+            <li><a href="scan_verify.html">Scan & Verify</a></li>
+            <li><a href="mismatch_reports.html">Mismatch Reports</a></li>
+            <li><a href="#" id="logout">Logout</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <h1 data-aos="fade-up">Dashboard</h1>
+        <div id="stats" data-aos="fade-up" data-aos-delay="200">
+            <!-- Stats will be loaded here -->
+        </div>
+        <canvas id="ordersChart" data-aos="zoom-in" data-aos-delay="400"></canvas>
+    </div>
+    <div id="toast-container"></div>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+</body>
+</html>

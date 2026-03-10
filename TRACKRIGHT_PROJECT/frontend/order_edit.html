@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Order - TrackRight</title>
+    <link rel="stylesheet" href="/static/assets/css/style.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        .order-edit-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .order-edit-header {
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .order-edit-header h2 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        
+        .form-group select {
+            cursor: pointer;
+        }
+        
+        .form-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .btn-submit {
+            background: #28a745;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-submit:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-cancel:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .read-only {
+            background: #f5f5f5;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>TrackRight</h2>
+        <ul>
+            <li><a href="/dashboard/">Dashboard</a></li>
+            <li><a href="/orders/">Orders</a></li>
+            <li><a href="/scan-verify/">Scan & Verify</a></li>
+            <li><a href="/mismatches/">Mismatch Reports</a></li>
+            <li><a href="#" id="logout">Logout</a></li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <div class="order-edit-container" data-aos="fade-up">
+            <div class="order-edit-header">
+                <h2>Edit Order #{{ order.order_number }}</h2>
+            </div>
+            
+            <form method="POST" id="edit-form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="order-number">Order Number</label>
+                    <div class="read-only">{{ order.order_number }}</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-name">Customer Name *</label>
+                    <input type="text" id="customer-name" name="customer_name" value="{{ order.customer_name }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-email">Email</label>
+                    <input type="email" id="customer-email" name="customer_email" value="{{ order.customer_email }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-phone">Phone</label>
+                    <input type="tel" id="customer-phone" name="customer_phone" value="{{ order.customer_phone }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="order-status">Order Status *</label>
+                    <select id="order-status" name="status" required>
+                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="packed" {% if order.status == 'packed' %}selected{% endif %}>Packed</option>
+                        <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped</option>
+                        <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered</option>
+                        <option value="mismatch" {% if order.status == 'mismatch' %}selected{% endif %}>Mismatch</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="order-location">Location</label>
+                    <input type="text" id="order-location" name="location" value="{{ order.location }}" disabled>
+                </div>
+                
+                <div class="form-group">
+                    <label>Created</label>
+                    <div class="read-only">{{ order.created_at|date:"M d, Y H:i" }}</div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-submit">Save Changes</button>
+                    <a href="/orders/" class="btn btn-cancel">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+        
+        // Logout functionality
+        document.getElementById('logout')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('authToken');
+            window.location.href = '/login/';
+        });
+    </script>
+</body>
+</html>

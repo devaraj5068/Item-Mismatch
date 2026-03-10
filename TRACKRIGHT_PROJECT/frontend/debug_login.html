@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Debug Test</title>
+</head>
+<body>
+    <h1>Login Debug Test</h1>
+    <button onclick="testLogin()">Test Login</button>
+    <div id="result"></div>
+
+    <script>
+        async function testLogin() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing login...';
+
+            try {
+                const response = await fetch('http://localhost:8000/api/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: 'Dev',
+                        password: 'Dev@123'
+                    })
+                });
+
+                const data = await response.json();
+
+                resultDiv.innerHTML = `
+                    <p>Status: ${response.status}</p>
+                    <p>OK: ${response.ok}</p>
+                    <p>Data: ${JSON.stringify(data)}</p>
+                `;
+
+                if (response.ok) {
+                    resultDiv.innerHTML += '<p style="color: green;">✓ Login successful!</p>';
+                } else {
+                    resultDiv.innerHTML += '<p style="color: red;">✗ Login failed!</p>';
+                }
+
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

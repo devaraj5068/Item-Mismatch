@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Mismatch - TrackRight{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>🎯 TrackRight</h2>
+        <ul>
+            <li><a href="{% url 'dashboard' %}">📊 Dashboard</a></li>
+            <li><a href="{% url 'orders' %}">📦 Orders</a></li>
+            <li><a href="{% url 'scan_verify' %}">🔍 Scan & Verify</a></li>
+            <li><a href="{% url 'mismatches' %}" class="active">⚠️ Mismatches</a></li>
+            <li><a href="{% url 'tasks' %}">✅ My Tasks</a></li>
+            <li><a href="{% url 'logout' %}">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-bar">
+            <h1>Add New Mismatch</h1>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-container" style="max-width: 600px; margin: 20px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            <form method="POST" id="mismatch-form">
+                {% csrf_token %}
+
+                {% if error %}
+                <div style="background-color: #fee2e2; border: 1px solid #fecaca; color: #dc2626; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
+                    <strong>Error:</strong> {{ error }}
+                </div>
+                {% endif %}
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="order" style="display: block; margin-bottom: 8px; font-weight: 500; color: #1f2937;">Order</label>
+                    <select id="order" name="order" required style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px;">
+                        <option value="">-- Select an Order --</option>
+                        {% for order in orders %}
+                            <option value="{{ order.id }}">{{ order.order_number }} - {{ order.customer_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="product" style="display: block; margin-bottom: 8px; font-weight: 500; color: #1f2937;">Product</label>
+                    <select id="product" name="product" required style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px;">
+                        <option value="">-- Select a Product --</option>
+                        {% for product in products %}
+                            <option value="{{ product.id }}">{{ product.name }} ({{ product.sku }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="expected_product" style="display: block; margin-bottom: 8px; font-weight: 500; color: #1f2937;">Expected Product</label>
+                    <input type="text" id="expected_product" name="expected_product" placeholder="e.g., Laptop" required style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px; box-sizing: border-box;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="scanned_product" style="display: block; margin-bottom: 8px; font-weight: 500; color: #1f2937;">Scanned Product</label>
+                    <input type="text" id="scanned_product" name="scanned_product" placeholder="e.g., Mouse" required style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px; box-sizing: border-box;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="expected_quantity" style="display: block; margin-bottom: 8px; font-weight: 500; color: #1f2937;">Expected Quantity</label>
+                    <input type="number" id="expected_quantity" name="expected_quantity" min="0" value="1" required style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px; box-sizing: border-box;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="actual_quantity" style="display: block; margin-bottom: 8px; font-weight: 500; color: #1f2937;">Actual Quantity</label>
+                    <input type="number" id="actual_quantity" name="actual_quantity" min="0" value="0" required style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px; box-sizing: border-box;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="location" style="display: block; margin-bottom: 8px; font-weight: 500; color: #1f2937;">Location</label>
+                    <input type="text" id="location" name="location" placeholder="e.g., Warehouse A, Section 3" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px; box-sizing: border-box;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="status" style="display: block; margin-bottom: 8px; font-weight: 500; color: #1f2937;">Status</label>
+                    <select id="status" name="status" required style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px;">
+                        <option value="pending">Pending Review</option>
+                        <option value="under_review">Under Review</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="notes" style="display: block; margin-bottom: 8px; font-weight: 500; color: #1f2937;">Notes (Optional)</label>
+                    <textarea id="notes" name="notes" rows="4" placeholder="Add any additional notes..." style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px; box-sizing: border-box; font-family: inherit;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Create Mismatch</button>
+                    <a href="{% url 'mismatches' %}" class="btn btn-secondary" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; background-color: #6b7280; color: white; padding: 10px;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container select,
+.form-container textarea {
+    transition: border-color 0.3s;
+}
+
+.form-container input[type="text"]:focus,
+.form-container input[type="email"]:focus,
+.form-container select:focus,
+.form-container textarea:focus {
+    outline: none;
+    border-color: #1e40af;
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+}
+</style>
+{% endblock %}

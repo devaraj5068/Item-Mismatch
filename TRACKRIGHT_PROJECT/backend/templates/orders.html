@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Orders - TrackRight{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>🎯 TrackRight</h2>
+        <ul>
+            <li><a href="{% url 'dashboard' %}">📊 Dashboard</a></li>
+            <li><a href="{% url 'orders' %}" class="active">📦 Orders</a></li>
+            <li><a href="{% url 'scan_verify' %}">🔍 Scan & Verify</a></li>
+            <li><a href="{% url 'mismatches' %}">⚠️ Mismatches</a></li>
+            <li><a href="{% url 'tasks' %}">✅ My Tasks</a></li>
+            <li><a href="{% url 'logout' %}">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-bar">
+            <h1>Orders</h1>
+            <div class="top-bar-right">
+                <button class="btn btn-primary">+ New Order</button>
+            </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3 style="margin: 0;">📦 All Orders</h3>
+                <input type="text" class="search-bar" placeholder="Search orders...">
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Items</th>
+                        <th>Barcode</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-list">
+                    {% if orders %}
+                        {% for order in orders %}
+                        <tr>
+                            <td>{{ order.order_number }}</td>
+                            <td>{{ order.customer_name }}</td>
+                            <td>{{ order.orderitem_set.count }} items</td>
+                            <td style="font-family: monospace; font-size: 12px;">{{ order.barcode|default:"No Barcode" }}</td>
+                            <td><span class="badge badge-{{ order.status }}">{{ order.status }}</span></td>
+                            <td>{{ order.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <button class="btn btn-sm" onclick="viewOrder({{ order.id }})">View</button>
+                                <button class="btn btn-sm btn-warning" onclick="editOrder({{ order.id }})">Edit</button>
+                                <button class="btn btn-sm btn-info" onclick="printBarcode('{{ order.barcode }}', '{{ order.order_number }}', '{{ order.customer_name }}')">🖨️ Print</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteOrder({{ order.id }})">Delete</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: #6b7280;">Loading orders...</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/orders.js' %}"></script>
+{% endblock %}

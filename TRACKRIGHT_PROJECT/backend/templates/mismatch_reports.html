@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mismatch Reports - TrackRight{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>🎯 TrackRight</h2>
+        <ul>
+            <li><a href="{% url 'dashboard' %}">📊 Dashboard</a></li>
+            <li><a href="{% url 'orders' %}">📦 Orders</a></li>
+            <li><a href="{% url 'scan_verify' %}">🔍 Scan & Verify</a></li>
+            <li><a href="{% url 'mismatches' %}" class="active">⚠️ Mismatches</a></li>
+            <li><a href="{% url 'tasks' %}">✅ My Tasks</a></li>
+            <li><a href="{% url 'logout' %}">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-bar">
+            <h1>Mismatch Reports</h1>
+            <div class="top-bar-right">
+                <a href="{% url 'add_mismatch' %}" class="btn btn-primary">+ New Mismatch</a>
+            </div>
+        </div>
+
+        <!-- Mismatch Stats -->
+        <div class="stats-grid">
+            <div class="stat-card red">
+                <h3>Total Mismatches</h3>
+                <div class="number" id="total-mismatches">0</div>
+            </div>
+            <div class="stat-card yellow">
+                <h3>Pending Review</h3>
+                <div class="number" id="pending-review">0</div>
+            </div>
+            <div class="stat-card green">
+                <h3>Resolved</h3>
+                <div class="number" id="resolved-count">0</div>
+            </div>
+        </div>
+
+        <!-- Mismatches Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3 style="margin: 0;">⚠️ All Mismatches</h3>
+                <input type="text" class="search-bar" placeholder="Search mismatches...">
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Expected Product</th>
+                        <th>Scanned Product</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="mismatches-list">
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: #6b7280;">Loading mismatches...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/mismatch.js' %}"></script>
+{% endblock %}

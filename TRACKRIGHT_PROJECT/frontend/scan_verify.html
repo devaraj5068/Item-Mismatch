@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan & Verify - TrackRight</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <style>
+        #scanner-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        
+        .scanner-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn-control {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+        
+        #start-scan-btn {
+            background: #28a745;
+            color: white;
+        }
+        
+        #start-scan-btn:hover:not(:disabled) {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(40,167,69,0.3);
+        }
+        
+        #start-scan-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        #stop-scan-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        #stop-scan-btn:hover:not(:disabled) {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220,53,69,0.3);
+        }
+        
+        #stop-scan-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .scan-result {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .result-success {
+            color: #155724;
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        
+        .result-error {
+            color: #721c24;
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .result-mismatch {
+            color: #856404;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>TrackRight</h2>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="orders.html">Orders</a></li>
+            <li><a href="scan_verify.html">Scan & Verify</a></li>
+            <li><a href="mismatch_reports.html">Mismatch Reports</a></li>
+            <li><a href="#" id="logout">Logout</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <h1 data-aos="fade-up">Scan & Verify</h1>
+        
+        <div id="scanner-container" data-aos="zoom-in" data-aos-delay="200"></div>
+        
+        <div class="scanner-controls" data-aos="fade-up" data-aos-delay="300">
+            <button id="start-scan-btn" class="btn-control">Start Scanning</button>
+            <button id="stop-scan-btn" class="btn-control" disabled>Stop Scanning</button>
+        </div>
+        
+        <div id="scan-result" data-aos="fade-up" data-aos-delay="400"></div>
+    </div>
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+        
+        // Logout functionality
+        document.getElementById('logout')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
+        });
+    </script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/scanner.js"></script>
+</body>
+</html>

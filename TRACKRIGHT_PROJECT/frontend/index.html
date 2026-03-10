@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackRight - Login</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container" data-aos="zoom-in">
+        <form id="login-form">
+            <h2 data-aos="fade-up">Welcome to TrackRight</h2>
+            <p><a href="landing.html" style="color: var(--primary); text-decoration: none;">← Back to Home</a></p>
+            
+            <div class="form-group" data-aos="fade-up" data-aos-delay="100">
+                <label>Username</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+            </div>
+            
+            <div class="form-group" data-aos="fade-up" data-aos-delay="200">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+            
+            <button type="submit" data-aos="fade-up" data-aos-delay="300">Login</button>
+            
+            <p id="error-message" data-aos="fade-up" data-aos-delay="400"></p>
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth.js"></script>
+</body>
+</html>

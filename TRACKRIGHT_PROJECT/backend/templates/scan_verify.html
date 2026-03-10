@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Scan & Verify - TrackRight{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>🎯 TrackRight</h2>
+        <ul>
+            <li><a href="{% url 'dashboard' %}">📊 Dashboard</a></li>
+            <li><a href="{% url 'orders' %}">📦 Orders</a></li>
+            <li><a href="{% url 'scan_verify' %}" class="{% if scan_mode == 'product' %}active{% endif %}">🔍 Scan & Verify</a></li>
+            <li><a href="{% url 'mismatches' %}">⚠️ Mismatches</a></li>
+            <li><a href="{% url 'tasks' %}">✅ My Tasks</a></li>
+            <li><a href="{% url 'logout' %}">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-bar">
+            <h1>Scan & Verify</h1>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card blue">
+                <h3>Today's Scans</h3>
+                <div class="number">{{ today_scans|default:0 }}</div>
+            </div>
+            <div class="stat-card green">
+                <h3>Matches</h3>
+                <div class="number">{{ matches|default:0 }}</div>
+            </div>
+            <div class="stat-card red">
+                <h3>Mismatches</h3>
+                <div class="number">{{ mismatches|default:0 }}</div>
+            </div>
+        </div>
+
+        <!-- Scan Interface -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3 style="margin: 0;">📱 Scanner Interface</h3>
+            </div>
+            <div style="padding: 40px; text-align: center;">
+                <p style="color: #6b7280; margin-bottom: 20px;">Position barcode/QR code in front of camera</p>
+                <div id="scanner" style="width: 100%; max-width: 400px; height: 300px; border: 2px solid #e5e7eb; margin: 20px auto; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: #f9fafb;">
+                    <p style="color: #9ca3af;">Camera feed will appear here</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <button id="start-scan-btn" class="btn btn-primary" style="padding: 10px 30px; margin: 5px; font-size: 14px; font-weight: 600;">▶️ Start Scanning</button>
+                    <button id="stop-scan-btn" class="btn btn-danger" style="padding: 10px 30px; margin: 5px; font-size: 14px; font-weight: 600; display: none;" disabled>⏹️ Stop Scanning</button>
+                </div>
+                <input type="text" id="barcode-input" placeholder="Or paste barcode here and press Enter..." style="padding: 10px; width: 100%; max-width: 400px; margin: 10px 0; border: 2px solid #e5e7eb; border-radius: 8px;">
+                
+                <!-- Scan Results -->
+                <div style="margin-top: 30px; padding: 20px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h4 style="margin: 0 0 15px 0; color: #374151;">Scan Results</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left;">
+                        <div>
+                            <label style="font-weight: 600; color: #6b7280; font-size: 12px;">EXPECTED PRODUCT</label>
+                            <div id="expected-product" style="font-size: 16px; font-weight: 600; color: #1f2937; margin-top: 5px;">N/A</div>
+                        </div>
+                        <div>
+                            <label style="font-weight: 600; color: #6b7280; font-size: 12px;">SCANNED PRODUCT</label>
+                            <div id="scanned-product" style="font-size: 16px; font-weight: 600; color: #1f2937; margin-top: 5px;">N/A</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <label style="font-weight: 600; color: #6b7280; font-size: 12px;">STATUS</label>
+                        <div id="scan-status" style="font-size: 16px; font-weight: 600; color: #6b7280; margin-top: 5px;">Ready to scan</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Scans Table -->
+        <div class="table-container" style="margin-top: 20px;">
+            <div class="table-header">
+                <h3 style="margin: 0;">📝 Scan History</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Barcode</th>
+                        <th>Product</th>
+                        <th>Status</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="scan-history">
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #6b7280;">No scans yet</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/scanner.js' %}"></script>
+{% endblock %}
