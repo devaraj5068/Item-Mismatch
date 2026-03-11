@@ -117,7 +117,7 @@ async function loadRecentOrders() {
 async function loadPendingTasks() {
     try {
         const token = localStorage.getItem('auth_token');
-        const response = await fetch('http://localhost:8000/api/tasks/', {
+        const response = await fetch('/api/tasks/', {
             method: 'GET',
             headers: {
                 'Authorization': `Token ${token}`,

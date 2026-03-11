@@ -173,7 +173,7 @@ async function handleTaskSubmit(e, isEdit, taskId) {
 
     try {
         const token = localStorage.getItem('auth_token');
-        const url = isEdit ? `http://localhost:8000/api/tasks/${taskId}/` : 'http://localhost:8000/api/tasks/';
+        const url = isEdit ? `/api/tasks/${taskId}/` : '/api/tasks/';
         const method = isEdit ? 'PUT' : 'POST';
 
         const response = await fetch(url, {
@@ -202,7 +202,7 @@ async function handleTaskSubmit(e, isEdit, taskId) {
 async function viewTask(taskId) {
     try {
         const token = localStorage.getItem('auth_token');
-        const response = await fetch(`http://localhost:8000/api/tasks/${taskId}/`, {
+        const response = await fetch(`/api/tasks/${taskId}/`, {
             method: 'GET',
             headers: {
                 'Authorization': `Token ${token}`,
@@ -273,7 +273,7 @@ function showTaskDetails(task) {
 async function editTask(taskId) {
     try {
         const token = localStorage.getItem('auth_token');
-        const response = await fetch(`http://localhost:8000/api/tasks/${taskId}/`, {
+        const response = await fetch(`/api/tasks/${taskId}/`, {
             method: 'GET',
             headers: {
                 'Authorization': `Token ${token}`,
@@ -294,7 +294,7 @@ async function deleteTask(taskId) {
     if (confirm('Are you sure you want to delete this task?')) {
         try {
             const token = localStorage.getItem('auth_token');
-            const response = await fetch(`http://localhost:8000/api/tasks/${taskId}/`, {
+            const response = await fetch(`/api/tasks/${taskId}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Token ${token}`,

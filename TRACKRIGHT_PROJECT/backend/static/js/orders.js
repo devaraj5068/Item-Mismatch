@@ -151,7 +151,7 @@ async function handleNewOrderSubmit(e) {
 
     try {
         const token = localStorage.getItem('auth_token');
-        const response = await fetch('http://localhost:8000/api/orders/', {
+        const response = await fetch('/api/orders/', {
             method: 'POST',
             headers: {
                 'Authorization': `Token ${token}`,
@@ -195,7 +195,7 @@ async function deleteOrder(orderId) {
     if (confirm('Are you sure you want to delete this order?')) {
         try {
             const token = localStorage.getItem('auth_token');
-            const response = await fetch(`http://localhost:8000/api/orders/${orderId}/`, {
+            const response = await fetch(`/api/orders/${orderId}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Token ${token}`,

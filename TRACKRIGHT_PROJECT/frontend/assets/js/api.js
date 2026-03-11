@@ -1,6 +1,6 @@
 // api.js - Backend API calls
 
-const API_BASE = 'http://localhost:8000/api/';
+const API_BASE = '/api/';
 
 function getAuthHeaders() {
     const token = localStorage.getItem('auth_token');
